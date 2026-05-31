@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alerta de Encalhes — PMP-SE/AL</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #0B4A2E; --verde-md: #1A7A4A; --verde-lt: #2ECC71;
+    --amarelo: #F0A500; --vermelho: #C0392B;
+    --bg: #F7F9F8; --card: #FFFFFF; --texto: #1A2E20;
+    --texto-lt: #5A7A65; --borda: #D5E8DC;
+    --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: var(--sans); color: var(--texto); min-height: 100vh; }
+  header {
+    background: var(--verde); color: white; padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid var(--verde-lt);
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-text h1 { font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
+  .logo-text p { font-size: 11px; opacity: 0.7; font-family: var(--mono); }
+  #last-update { font-family: var(--mono); font-size: 11px; opacity: 0.7; text-align: right; }
+  main { padding: 20px 24px; max-width: 1100px; margin: 0 auto; }
+  .alerta-principal {
+    border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 20px;
+    border: 2px solid transparent; transition: all 0.4s;
+  }
+  .alerta-principal.verde  { background: #E8F8EF; border-color: var(--verde-lt); }
+  .alerta-principal.amarelo { background: #FFF8E6; border-color: var(--amarelo); }
+  .alerta-principal.vermelho { background: #FDECEA; border-color: var(--vermelho); }
+  .alerta-icone { font-size: 48px; line-height: 1; }
+  .alerta-texto h2 { font-size: 22px; font-weight: 600; }
+  .alerta-texto p { font-size: 14px; color: var(--texto-lt); margin-top: 4px; }
+  .alerta-badge { margin-left: auto; padding: 8px 20px; border-radius: 20px; font-family: var(--mono); font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .verde  .alerta-badge { background: var(--verde-lt); color: white; }
+  .amarelo .alerta-badge { background: var(--amarelo); color: white; }
+  .vermelho .alerta-badge { background: var(--vermelho); color: white; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .card { background: var(--card); border-radius: 10px; padding: 16px 18px; border: 1px solid var(--borda); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .card-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--texto-lt); margin-bottom: 10px; }
+  .metric-val { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--verde); line-height: 1; }
+  .metric-unit { font-size: 13px; color: var(--texto-lt); margin-top: 4px; }
+  .risk-bar-bg { height: 10px; border-radius: 5px; background: linear-gradient(90deg, #2ECC71 0%, #F0A500 50%, #C0392B 100%); position: relative; margin: 8px 0 4px; }
+  .risk-needle { width: 14px; height: 14px; background: white; border: 3px solid var(--verde); border-radius: 50%; position: absolute; top: -2px; transform: translateX(-50%); transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+  .risk-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--texto-lt); font-family: var(--mono); }
+  .dias-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .dia-card { text-align: center; padding: 12px 8px; border-radius: 8px; border: 1px solid var(--borda); background: var(--bg); }
+  .dia-card.hoje { background: var(--verde); color: white; border-color: var(--verde); }
+  .dia-card.hoje .dia-sub, .dia-card.hoje .dia-onda { color: rgba(255,255,255,0.7); }
+  .dia-nome { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .dia-sub { font-size: 10px; color: var(--texto-lt); margin: 2px 0 8px; }
+  .dia-emoji { font-size: 22px; margin-bottom: 6px; }
+  .dia-vento { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+  .dia-onda { font-size: 11px; color: var(--texto-lt); }
+  .dia-risco { margin-top: 8px; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; font-family: var(--mono); }
+  .risco-baixo  { background: #E8F8EF; color: var(--verde-md); }
+  .risco-medio  { background: #FFF8E6; color: #B07800; }
+  .risco-alto   { background: #FDECEA; color: var(--vermelho); }
+  .divider { font-size: 13px; font-weight: 600; color: var(--texto-lt); text-transform: uppercase; letter-spacing: 0.08em; margin: 4px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--borda); }
+  .ssh-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ssh-item { text-align: center; }
+  .ssh-val { font-family: var(--mono); font-size: 18px; font-weight: 700; }
+  .ssh-label { font-size: 10px; color: var(--texto-lt); margin-top: 2px; }
+  .hist-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+  .hist-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .hist-bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 3px; }
+  .hist-ano { font-size: 10px; font-family: var(--mono); color: var(--texto-lt); }
+  .hist-n { font-size: 9px; color: var(--texto-lt); }
+  .footer-note { font-size: 11px; color: var(--texto-lt); margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--borda); font-family: var(--mono); }
+  @media (max-width: 700px) {
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .alerta-principal { flex-wrap: wrap; }
+    .alerta-badge { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div style="font-size:28px;">🌊</div>
+    <div class="logo-text">
+      <h1>ALERTA DE ENCALHES — PMP-SE/AL</h1>
+      <p>Procellariiformes · Piaçabuçu/AL → Conde/BA</p>
+    </div>
+  </div>
+  <div id="last-update">Carregando...<br>dados meteorológicos</div>
+</header>
+<main>
+  <div class="alerta-principal verde" id="alerta-box">
+    <div class="alerta-icone" id="alerta-emoji">🔄</div>
+    <div class="alerta-texto">
+      <h2 id="alerta-titulo">Carregando previsão...</h2>
+      <p id="alerta-descricao">Consultando dados meteorológicos para o litoral de Aracaju</p>
+    </div>
+    <div class="alerta-badge" id="alerta-badge">—</div>
+  </div>
+
+  <div class="divider">🌬️ Módulo 1 — Alerta Operacional (próximas 120h)</div>
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-title">💨 Vento Hoje (máx.)</div>
+      <div class="metric-val" id="vento-atual">—</div>
+      <div class="metric-unit">m/s</div>
+      <div class="risk-bar-bg"><div class="risk-needle" id="needle-vento" style="left:20%"></div></div>
+      <div class="risk-labels"><span>0</span><span>5</span><span>10+</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌊 Ondas Hoje (máx.)</div>
+      <div class="metric-val" id="onda-atual">—</div>
+      <div class="metric-unit">m</div>
+      <div class="risk-bar-bg"><div class="risk-needle" id="needle-onda" style="left:20%"></div></div>
+      <div class="risk-labels"><span>0</span><span>1,5</span><span>3+</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Índice de Risco Hoje</div>
+      <div class="metric-val" id="risco-hoje">—</div>
+      <div class="metric-unit" id="risco-hoje-label">calculando...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 Janela Sazonal</div>
+      <div class="metric-val" id="janela-risco" style="font-size:18px">Mai–Jun</div>
+      <div class="metric-unit" id="janela-status">verificando...</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">📆 Previsão — Próximos 5 Dias</div>
+    <div class="dias-grid" id="dias-grid"><div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--texto-lt);">Carregando...</div></div>
+  </div>
+
+  <div class="divider">🐦 Módulo 2 — Alerta Sazonal (intensidade do boom)</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📡 Variáveis de Invernada 2025–2026 (ago/25–mar/26)</div>
+      <div class="ssh-grid">
+        <div class="ssh-item"><div class="ssh-val" style="color:var(--vermelho)">+0,104</div><div class="ssh-label">SSH anomalia (m)</div><div style="font-size:10px;color:var(--vermelho)">↑ acima média</div></div>
+        <div class="ssh-item"><div class="ssh-val" style="color:var(--amarelo)">23,86°C</div><div class="ssh-label">TSM média</div><div style="font-size:10px;color:var(--amarelo)">↑ mais quente</div></div>
+        <div class="ssh-item"><div class="ssh-val" style="color:var(--verde-md)">0,108</div><div class="ssh-label">Clorofila (mg/m³)</div><div style="font-size:10px;color:var(--verde-md)">↓ abaixo média</div></div>
+      </div>
+      <div style="margin-top:14px;padding:10px;background:#FFF8E6;border-radius:8px;font-size:12px;border-left:3px solid var(--amarelo);">
+        <strong>Previsão 2026:</strong> SSH = +0,104 m (maior da série 2020–2025, ρ=+0,77). <strong>Boom moderado-intenso esperado.</strong>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📈 Histórico Mai–Jun (2020–2025)</div>
+      <div class="hist-bars" id="hist-bars"></div>
+      <div style="margin-top:10px;font-size:11px;color:var(--texto-lt);">
+        <span style="display:inline-block;width:10px;height:10px;background:var(--vermelho);border-radius:2px;margin-right:4px;"></span>2024: anomalia extrema (El Niño 2023–24)
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">✅ Recomendações Operacionais</div>
+    <div id="recomendacoes" style="font-size:13px;line-height:1.8;">Carregando...</div>
+  </div>
+
+  <div class="footer-note">
+    Fontes: Open-Meteo (previsão) · ERA5/ECMWF · Copernicus Marine Service · SIMBA/PMP-SE/AL 2020–2025<br>
+    Metodologia: correlações calibradas com dados históricos do programa. Índice de risco operacional baseado em regressão ERA5 × encalhes (mai–jun, n=366 dias).
+  </div>
+</main>
+
+<script>
+const LAT=-10.95, LON=-37.05;
+const DIAS_PT=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MESES_PT=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const HISTORICO=[{ano:2020,n:159},{ano:2021,n:255},{ano:2022,n:146},{ano:2023,n:470},{ano:2024,n:1649},{ano:2025,n:431}];
+const MAX_HIST=1649;
+
+function calcRisco(v,o){
+  const rv=v<4?.1:v<5?.25:v<6?.45:v<7?.65:v<8?.8:.95;
+  const ro=o<0.8?.05:o<1.2?.2:o<1.6?.4:o<2?.65:o<2.5?.8:.95;
+  const mes=new Date().getMonth()+1;
+  const rs=mes>=5&&mes<=6?1:mes===4||mes===7?.6:mes===3||mes===8?.3:.1;
+  return Math.min(.99,(rv*.45+ro*.35)*rs+.05);
+}
+function classeRisco(r){return r<.35?'baixo':r<.65?'medio':'alto';}
+function labelRisco(r){return r<.35?'BAIXO':r<.65?'MODERADO':'ALTO';}
+function emojiRisco(r){return r<.35?'🟢':r<.65?'🟡':'🔴';}
+
+function renderHistorico(){
+  const c=document.getElementById('hist-bars');
+  c.innerHTML=HISTORICO.map(h=>{
+    const pct=Math.max(4,(h.n/MAX_HIST)*100);
+    const cor=h.ano===2024?'var(--vermelho)':h.n>400?'var(--amarelo)':'var(--verde-md)';
+    return `<div class="hist-bar-wrap"><div class="hist-n">${h.n}</div><div class="hist-bar" style="height:${pct}%;background:${cor};"></div><div class="hist-ano">${h.ano}</div></div>`;
+  }).join('');
+}
+
+function atualizarAlerta(riscoMax){
+  const mes=new Date().getMonth()+1;
+  const naJ=mes>=5&&mes<=6;
+  const box=document.getElementById('alerta-box');
+  box.className='alerta-principal '+(riscoMax>=.65?'vermelho':riscoMax>=.35?'amarelo':'verde');
+  document.getElementById('alerta-emoji').textContent=riscoMax>=.65?'⚠️':riscoMax>=.35?'🟡':'✅';
+  document.getElementById('alerta-titulo').textContent=riscoMax>=.65?'ALERTA: Condições de alto risco para encalhes':riscoMax>=.35?'ATENÇÃO: Condições moderadas de risco':naJ?'Condições favoráveis — Janela migratória ativa':'Condições normais — Fora da janela de pico';
+  document.getElementById('alerta-descricao').textContent=riscoMax>=.65?(naJ?'Vento e/ou ondas elevados durante janela migratória ativa. Reforço de equipe recomendado.':'Condições desfavoráveis. Monitorar mesmo fora do pico sazonal.'):naJ?'Janela migratória ativa. Monitoramento regular recomendado.':'Período de baixo risco sazonal.';
+  document.getElementById('alerta-badge').textContent=riscoMax>=.65?'RISCO ALTO':riscoMax>=.35?'RISCO MODERADO':'RISCO BAIXO';
+}
+
+function atualizarRecomendacoes(riscoMax,diasAlto){
+  const mes=new Date().getMonth()+1;
+  const naJ=mes>=5&&mes<=6;
+  let html='';
+  if(riscoMax>=.65){html=`<span style="color:var(--vermelho);font-weight:600;">⚠️ Ação imediata recomendada</span><br>• Convocar equipe adicional para os próximos ${diasAlto} dia(s) de alto risco<br>• Priorizar trechos de Aracaju e Barra dos Coqueiros<br>• Preparar triagem para animais vivos (25–35% do total esperado)<br>• Verificar disponibilidade do CETAS`;}
+  else if(riscoMax>=.35&&naJ){html=`<span style="color:var(--amarelo);font-weight:600;">🟡 Prontidão elevada</span><br>• Manter equipe em prontidão para acionamento rápido<br>• Monitoramento em todos os trechos programados<br>• Atenção após frentes frias (vento S/SE acima de 6 m/s)`;}
+  else if(naJ){html=`<span style="color:var(--verde-md);font-weight:600;">✅ Monitoramento de rotina</span><br>• Janela migratória ativa: cobertura diária de todos os trechos<br>• Previsão sazonal 2026: boom moderado-intenso (SSH acima da média)<br>• Revisar previsão meteorológica diariamente`;}
+  else{html=`<span style="color:var(--verde-md);font-weight:600;">✅ Período de baixo risco sazonal</span><br>• Monitoramento regular conforme protocolo<br>• Próxima janela de alto risco: maio–junho<br>• Período para calibração de equipes e revisão de protocolos`;}
+  document.getElementById('recomendacoes').innerHTML=html;
+}
+
+async function buscarPrevisao(){
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=wind_speed_10m_max,wave_height_max&wind_speed_unit=ms&timezone=America%2FSao_Paulo&forecast_days=5`;
+    const data=await(await fetch(url)).json();
+    const d=data.daily;
+    const now=new Date();
+    document.getElementById('last-update').innerHTML=`Atualizado: ${now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}<br>${now.toLocaleDateString('pt-BR')}`;
+    const v0=d.wind_speed_10m_max[0]||5;
+    const o0=d.wave_height_max?d.wave_height_max[0]||1.2:1.2;
+    const r0=calcRisco(v0,o0);
+    document.getElementById('vento-atual').textContent=v0.toFixed(1);
+    document.getElementById('onda-atual').textContent=o0.toFixed(2);
+    document.getElementById('risco-hoje').textContent=(r0*100).toFixed(0)+'%';
+    document.getElementById('risco-hoje-label').textContent=labelRisco(r0);
+    document.getElementById('needle-vento').style.left=Math.min(95,(v0/10)*100)+'%';
+    document.getElementById('needle-onda').style.left=Math.min(95,(o0/3)*100)+'%';
+    const mes=now.getMonth()+1;
+    document.getElementById('janela-risco').textContent=mes>=5&&mes<=6?'🟢 ATIVA':mes===4||mes===7?'🟡 LIMIAR':'⚪ INATIVA';
+    document.getElementById('janela-status').textContent=mes>=5&&mes<=6?'Dentro da janela migratória':'Fora do pico sazonal';
+    let riscoMax=0,diasAlto=0;
+    const c=document.getElementById('dias-grid');
+    c.innerHTML='';
+    for(let i=0;i<5;i++){
+      const v=d.wind_speed_10m_max[i]||0;
+      const o=d.wave_height_max?d.wave_height_max[i]||0:0;
+      const r=calcRisco(v,o);
+      if(r>riscoMax)riscoMax=r;
+      if(r>=.65)diasAlto++;
+      const dt=new Date(d.time[i]);
+      const nm=i===0?'Hoje':DIAS_PT[dt.getDay()];
+      const dl=`${dt.getDate()}/${MESES_PT[dt.getMonth()]}`;
+      c.innerHTML+=`<div class="dia-card ${i===0?'hoje':''}"><div class="dia-nome">${nm}</div><div class="dia-sub">${dl}</div><div class="dia-emoji">${v>7?'💨':v>5?'🌬️':'🍃'}${o>2?'🌊':o>1.2?'〰️':'💧'}</div><div class="dia-vento">${v.toFixed(1)} m/s</div><div class="dia-onda">${o.toFixed(2)} m</div><div class="dia-risco risco-${classeRisco(r)}">${emojiRisco(r)} ${labelRisco(r)}</div></div>`;
+    }
+    atualizarAlerta(riscoMax);
+    atualizarRecomendacoes(riscoMax,diasAlto);
+  }catch(e){
+    document.getElementById('last-update').innerHTML='Erro ao carregar<br>dados';
+    document.getElementById('dias-grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--texto-lt);">Dados indisponíveis. Verifique conexão.</div>';
+  }
+}
+
+renderHistorico();
+buscarPrevisao();
+setInterval(buscarPrevisao,10*60*1000);
+</script>
+</body>
+</html>
