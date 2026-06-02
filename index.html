@@ -54,16 +54,24 @@ main{padding:14px 18px;max-width:1200px;margin:0 auto;}
 .r-baixo{background:#E8F8EF;color:var(--verde-md);}
 .r-medio{background:#FFF8E6;color:#B07800;}
 .r-alto{background:#FDECEA;color:var(--vermelho);}
+.legenda-box{background:var(--card);border:1px solid var(--borda);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.legenda-titulo{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--texto-lt);width:100%;margin-bottom:2px;}
+.legenda-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--texto-lt);padding:3px 8px;background:var(--bg);border-radius:6px;}
+.zona-tabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+.zona-tab{padding:4px 12px;border-radius:14px;border:1px solid var(--borda);background:var(--bg);font-size:11px;font-weight:600;cursor:pointer;color:var(--texto-lt);transition:all .2s;}
+.zona-tab:hover{border-color:var(--verde-md);color:var(--verde-md);}
+.zona-tab.ativo{background:var(--verde);color:white;border-color:var(--verde);}
 .dias-scroll{overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
 .dias-inner{display:flex;gap:5px;min-width:max-content;}
-.dia-card{text-align:center;padding:8px 6px;border-radius:7px;border:1px solid var(--borda);background:var(--bg);min-width:68px;}
+.dia-card{text-align:center;padding:8px 6px;border-radius:7px;border:1px solid var(--borda);background:var(--bg);min-width:66px;}
 .dia-card.hoje{background:var(--verde);color:white;border-color:var(--verde);}
-.dia-card.hoje .dia-sub,.dia-card.hoje .dia-onda{color:rgba(255,255,255,.7);}
+.dia-card.hoje .dia-sub,.dia-card.hoje .dia-onda,.dia-card.hoje .dia-desc{color:rgba(255,255,255,.7);}
 .dia-nome{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
-.dia-sub{font-size:9px;color:var(--texto-lt);margin:1px 0 5px;}
-.dia-emoji{font-size:16px;margin-bottom:3px;}
+.dia-sub{font-size:9px;color:var(--texto-lt);margin:1px 0 4px;}
+.dia-emoji{font-size:15px;margin-bottom:2px;}
 .dia-vento{font-family:var(--mono);font-size:11px;font-weight:700;}
 .dia-onda{font-size:9px;color:var(--texto-lt);}
+.dia-desc{font-size:9px;color:var(--texto-lt);margin-top:1px;}
 .dia-risco{margin-top:4px;padding:2px 5px;border-radius:6px;font-size:9px;font-weight:700;font-family:var(--mono);}
 .inst-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
 .inst-card{border-radius:8px;padding:10px 12px;border:1px solid var(--borda);background:var(--card);}
@@ -73,8 +81,8 @@ main{padding:14px 18px;max-width:1200px;margin:0 auto;}
 .inst-bar{height:4px;border-radius:2px;margin-top:6px;background:var(--borda);}
 .inst-bar-fill{height:100%;border-radius:2px;}
 .sp-bar-wrap{margin-bottom:5px;}
-.sp-nome{font-size:10px;color:var(--texto-lt);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sp-bar-bg{height:14px;background:var(--bg);border-radius:3px;position:relative;}
+.sp-nome{font-size:10px;color:var(--texto-lt);margin-bottom:2px;}
+.sp-bar-bg{height:14px;background:var(--bg);border-radius:3px;}
 .sp-bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:5px;}
 .sp-n{font-size:9px;font-family:var(--mono);color:white;font-weight:700;}
 .hist-bars{display:flex;align-items:flex-end;gap:4px;height:60px;}
@@ -82,8 +90,8 @@ main{padding:14px 18px;max-width:1200px;margin:0 auto;}
 .hist-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;}
 .hist-ano{font-size:9px;font-family:var(--mono);color:var(--texto-lt);}
 .hist-n{font-size:8px;color:var(--texto-lt);}
-.footer-note{font-size:9px;color:var(--texto-lt);margin-top:14px;padding-top:8px;border-top:1px solid var(--borda);font-family:var(--mono);}
-@media(max-width:700px){.grid-4,.inst-grid,.zona-grid{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
+.footer-note{font-size:9px;color:var(--texto-lt);margin-top:14px;padding-top:8px;border-top:1px solid var(--borda);font-family:var(--mono);line-height:1.7;}
+@media(max-width:700px){.grid-4,.inst-grid,.zona-grid{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}.legenda-box{gap:5px;}}
 </style>
 </head>
 <body>
@@ -111,13 +119,32 @@ main{padding:14px 18px;max-width:1200px;margin:0 auto;}
   <div class="alerta-badge" id="alerta-badge">—</div>
 </div>
 <div id="secao-met">
-  <div class="divider">🌬️ Alerta por Zona — Hoje</div>
+  <div class="divider">🌬️ Condições Atuais por Zona</div>
   <div class="zona-grid" id="zona-grid"></div>
-  <div class="divider">📆 Previsão Meteorológica — 16 Dias (zona centro)</div>
-  <div class="dias-scroll"><div class="dias-inner" id="dias-grid"><div style="padding:16px;color:var(--texto-lt);">Carregando...</div></div></div>
+  <div class="legenda-box">
+    <div class="legenda-titulo">📖 Legenda dos símbolos</div>
+    <div class="legenda-item">🍃 Vento fraco (&lt;5 m/s)</div>
+    <div class="legenda-item">🌬️ Vento moderado (5–7 m/s)</div>
+    <div class="legenda-item">💨 Vento forte (&gt;7 m/s)</div>
+    <div class="legenda-item">💧 Ondas baixas (&lt;1,2 m)</div>
+    <div class="legenda-item">〰️ Ondas moderadas (1,2–2 m)</div>
+    <div class="legenda-item">🌊 Ondas altas (&gt;2 m)</div>
+    <div class="legenda-item">🟢 Risco baixo (&lt;35%)</div>
+    <div class="legenda-item">🟡 Risco moderado (35–65%)</div>
+    <div class="legenda-item">🔴 Risco alto (&gt;65%)</div>
+  </div>
+  <div class="divider">📆 Previsão 16 Dias — Selecione a zona:</div>
+  <div class="zona-tabs">
+    <button class="zona-tab ativo" onclick="showZona('norte',this)">🔵 Norte — Piaçabuçu/AL</button>
+    <button class="zona-tab" onclick="showZona('centro',this)">🟢 Centro — Aracaju/SE</button>
+    <button class="zona-tab" onclick="showZona('sul',this)">🟠 Sul — Sítio do Conde/BA</button>
+  </div>
+  <div class="dias-scroll" id="dias-norte"><div class="dias-inner" id="grid-norte"><div style="padding:16px;color:var(--texto-lt);">Carregando...</div></div></div>
+  <div class="dias-scroll" id="dias-centro" style="display:none;"><div class="dias-inner" id="grid-centro"></div></div>
+  <div class="dias-scroll" id="dias-sul" style="display:none;"><div class="dias-inner" id="grid-sul"></div></div>
 </div>
 <div id="secao-dados">
-  <div class="divider" id="divider-dados">🐦 Aves Marinhas — SIMBA/PMP-SE/AL 2026</div>
+  <div class="divider" id="divider-dados">🐦 Aves Marinhas — SIMBA/PMP-SE/AL · FAI · 2026</div>
   <div class="grid-4" id="cards-totais"></div>
   <div class="grid-2">
     <div class="card"><div class="card-title" id="chart-serie-title">Série diária — Mortos vs Vivos</div><div style="position:relative;width:100%;height:180px;"><canvas id="chartSerie"></canvas></div><div style="display:flex;gap:10px;font-size:10px;color:var(--texto-lt);margin-top:5px;"><span style="display:flex;align-items:center;gap:3px;"><span style="width:14px;height:3px;background:var(--vermelho);display:inline-block;border-radius:2px;"></span>Mortos</span><span style="display:flex;align-items:center;gap:3px;"><span style="width:14px;height:3px;background:var(--verde-md);display:inline-block;border-radius:2px;border-style:dashed;"></span>Vivos</span></div></div>
@@ -141,70 +168,85 @@ main{padding:14px 18px;max-width:1200px;margin:0 auto;}
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const DADOS={Aves:{total:2077,mortos:1563,vivos:514,mensal:[{month:1,total:6,mortos:5,vivos:1},{month:2,total:4,mortos:2,vivos:2},{month:3,total:46,mortos:35,vivos:11},{month:4,total:549,mortos:457,vivos:92},{month:5,total:1449,mortos:1045,vivos:404},{month:6,total:23,mortos:19,vivos:4}],inst_res:[{inst:'Biota',total:36,mortos:25,vivos:11,pct:30.6},{inst:'FMA',total:1622,mortos:1251,vivos:371,pct:22.9},{inst:'IMA',total:399,mortos:267,vivos:132,pct:33.1},{inst:'TAMAR',total:20,mortos:20,vivos:0,pct:0}],top_sp:[{e:'C. diomedea borealis',n:1345},{e:'P. puffinus',n:302},{e:'P. gravis',n:262},{e:'P. griseus',n:15},{e:'S. maccormicki',n:12}],daily_labels:['04-01','04-07','04-13','04-18','04-22','04-25','04-29','05-01','05-05','05-09','05-12','05-15','05-18','05-21','05-24','05-27','05-30','06-01'],daily_m:[2,7,6,21,39,56,38,11,11,82,36,9,29,105,62,123,57,23],daily_v:[2,0,0,11,3,8,4,0,3,36,5,2,5,27,29,61,11,4],inst_labels:['04-01','04-07','04-13','04-18','04-22','04-25','04-29','05-01','05-05','05-09','05-12','05-15','05-18','05-21','05-24','05-27','05-30','06-01'],inst_fma:[1,5,5,21,29,41,34,10,9,67,35,7,18,62,51,78,47,19],inst_ima:[1,2,1,0,9,15,2,0,2,13,1,1,9,41,11,43,10,3],inst_biota:[0,0,0,0,1,0,2,1,0,2,0,1,0,2,0,1,0,1],inst_tamar:[0,2,0,0,0,0,2,0,1,0,1,1,2,0,0,1,0,0],hist:[{ano:'2020',n:159,t:'normal'},{ano:'2021',n:255,t:'normal'},{ano:'2022',n:146,t:'normal'},{ano:'2023',n:470,t:'normal'},{ano:'2024',n:1649,t:'anomalia'},{ano:'2025',n:431,t:'normal'},{ano:'2026',n:1472,t:'2026'}],cor:'#185FA5',icone:'🐦',label:'Aves Marinhas',met:true},Reptilia:{total:593,mortos:574,vivos:19,mensal:[{month:1,total:145,mortos:139,vivos:6},{month:2,total:162,mortos:160,vivos:2},{month:3,total:154,mortos:150,vivos:4},{month:4,total:72,mortos:67,vivos:5},{month:5,total:60,mortos:58,vivos:2}],inst_res:[{inst:'TAMAR',total:403,mortos:389,vivos:14,pct:3.5},{inst:'Biota',total:190,mortos:185,vivos:5,pct:2.6}],top_sp:[{e:'L. olivacea',n:372},{e:'C. mydas',n:182},{e:'C. caretta',n:27},{e:'E. imbricata',n:10}],daily_labels:['Jan','Fev','Mar','Abr','Mai'],daily_m:[139,160,150,67,58],daily_v:[6,2,4,5,2],inst_labels:['Jan','Fev','Mar','Abr','Mai'],inst_fma:[0,0,0,0,0],inst_ima:[0,0,0,0,0],inst_biota:[23,35,30,20,15],inst_tamar:[122,127,124,52,45],hist:[{ano:'2020',n:280,t:'normal'},{ano:'2021',n:310,t:'normal'},{ano:'2022',n:295,t:'normal'},{ano:'2023',n:320,t:'normal'},{ano:'2024',n:340,t:'normal'},{ano:'2025',n:290,t:'normal'},{ano:'2026',n:593,t:'2026'}],cor:'#534AB7',icone:'🐢',label:'Tartarugas',met:false},Mammalia:{total:30,mortos:27,vivos:3,mensal:[{month:1,total:7,mortos:6,vivos:1},{month:2,total:5,mortos:5,vivos:0},{month:3,total:9,mortos:9,vivos:0},{month:4,total:2,mortos:2,vivos:0},{month:5,total:6,mortos:4,vivos:2},{month:6,total:1,mortos:1,vivos:0}],inst_res:[{inst:'FMA',total:15,mortos:13,vivos:2,pct:13.3},{inst:'IMA',total:12,mortos:11,vivos:1,pct:8.3},{inst:'Biota',total:3,mortos:3,vivos:0,pct:0}],top_sp:[{e:'Sotalia guianensis',n:23},{e:'Stenella clymene',n:2},{e:'S. longirostris',n:1},{e:'Pseudorca crassidens',n:1},{e:'Lagenodelphis hosei',n:1}],daily_labels:['Jan','Fev','Mar','Abr','Mai','Jun'],daily_m:[6,5,9,2,4,1],daily_v:[1,0,0,0,2,0],inst_labels:['Jan','Fev','Mar','Abr','Mai','Jun'],inst_fma:[3,2,4,1,4,1],inst_ima:[3,2,5,1,1,0],inst_biota:[1,1,0,0,1,0],inst_tamar:[0,0,0,0,0,0],hist:[{ano:'2020',n:18,t:'normal'},{ano:'2021',n:22,t:'normal'},{ano:'2022',n:15,t:'normal'},{ano:'2023',n:28,t:'normal'},{ano:'2024',n:31,t:'normal'},{ano:'2025',n:24,t:'normal'},{ano:'2026',n:30,t:'2026'}],cor:'#1A7A4A',icone:'🐬',label:'Mamíferos Marinhos',met:false}};
-const INST_CORES={FMA:'#185FA5',IMA:'#534AB7',Biota:'#1D9E75',TAMAR:'#F0A500'};
-const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-const DIAS_PT=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-const MESES_PT=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-let chartSerie=null,chartMensal=null,chartInst=null,grupoAtual='Aves';
+const DADOS={Aves:{total:2077,mortos:1563,vivos:514,mensal:[{month:1,total:6,mortos:5,vivos:1},{month:2,total:4,mortos:2,vivos:2},{month:3,total:46,mortos:35,vivos:11},{month:4,total:549,mortos:457,vivos:92},{month:5,total:1449,mortos:1045,vivos:404},{month:6,total:23,mortos:19,vivos:4}],inst_res:[{inst:"Biota",total:36,mortos:25,vivos:11,pct:30.6},{inst:"FMA",total:1622,mortos:1251,vivos:371,pct:22.9},{inst:"IMA",total:399,mortos:267,vivos:132,pct:33.1},{inst:"TAMAR",total:20,mortos:20,vivos:0,pct:0}],top_sp:[{e:"C. diomedea borealis",n:1345},{e:"P. puffinus",n:302},{e:"P. gravis",n:262},{e:"P. griseus",n:15},{e:"S. maccormicki",n:12}],daily_labels:["04-01","04-07","04-13","04-18","04-22","04-25","04-29","05-01","05-05","05-09","05-12","05-15","05-18","05-21","05-24","05-27","05-30","06-01"],daily_m:[2,7,6,21,39,56,38,11,11,82,36,9,29,105,62,123,57,23],daily_v:[2,0,0,11,3,8,4,0,3,36,5,2,5,27,29,61,11,4],inst_labels:["04-01","04-07","04-13","04-18","04-22","04-25","04-29","05-01","05-05","05-09","05-12","05-15","05-18","05-21","05-24","05-27","05-30","06-01"],inst_fma:[1,5,5,21,29,41,34,10,9,67,35,7,18,62,51,78,47,19],inst_ima:[1,2,1,0,9,15,2,0,2,13,1,1,9,41,11,43,10,3],inst_biota:[0,0,0,0,1,0,2,1,0,2,0,1,0,2,0,1,0,1],inst_tamar:[0,2,0,0,0,0,2,0,1,0,1,1,2,0,0,1,0,0],hist:[{ano:"2020",n:159,t:"normal"},{ano:"2021",n:255,t:"normal"},{ano:"2022",n:146,t:"normal"},{ano:"2023",n:470,t:"normal"},{ano:"2024",n:1649,t:"anomalia"},{ano:"2025",n:431,t:"normal"},{ano:"2026",n:1472,t:"2026"}],cor:"#185FA5",icone:"🐦",label:"Aves Marinhas",met:true},Reptilia:{total:593,mortos:574,vivos:19,mensal:[{month:1,total:145,mortos:139,vivos:6},{month:2,total:162,mortos:160,vivos:2},{month:3,total:154,mortos:150,vivos:4},{month:4,total:72,mortos:67,vivos:5},{month:5,total:60,mortos:58,vivos:2}],inst_res:[{inst:"TAMAR",total:403,mortos:389,vivos:14,pct:3.5},{inst:"Biota",total:190,mortos:185,vivos:5,pct:2.6}],top_sp:[{e:"L. olivacea",n:372},{e:"C. mydas",n:182},{e:"C. caretta",n:27},{e:"E. imbricata",n:10}],daily_labels:["Jan","Fev","Mar","Abr","Mai"],daily_m:[139,160,150,67,58],daily_v:[6,2,4,5,2],inst_labels:["Jan","Fev","Mar","Abr","Mai"],inst_fma:[0,0,0,0,0],inst_ima:[0,0,0,0,0],inst_biota:[23,35,30,20,15],inst_tamar:[122,127,124,52,45],hist:[{ano:"2020",n:280,t:"normal"},{ano:"2021",n:310,t:"normal"},{ano:"2022",n:295,t:"normal"},{ano:"2023",n:320,t:"normal"},{ano:"2024",n:340,t:"normal"},{ano:"2025",n:290,t:"normal"},{ano:"2026",n:593,t:"2026"}],cor:"#534AB7",icone:"🐢",label:"Tartarugas",met:false},Mammalia:{total:30,mortos:27,vivos:3,mensal:[{month:1,total:7,mortos:6,vivos:1},{month:2,total:5,mortos:5,vivos:0},{month:3,total:9,mortos:9,vivos:0},{month:4,total:2,mortos:2,vivos:0},{month:5,total:6,mortos:4,vivos:2},{month:6,total:1,mortos:1,vivos:0}],inst_res:[{inst:"FMA",total:15,mortos:13,vivos:2,pct:13.3},{inst:"IMA",total:12,mortos:11,vivos:1,pct:8.3},{inst:"Biota",total:3,mortos:3,vivos:0,pct:0}],top_sp:[{e:"Sotalia guianensis",n:23},{e:"Stenella clymene",n:2},{e:"S. longirostris",n:1},{e:"Pseudorca crassidens",n:1},{e:"Lagenodelphis hosei",n:1}],daily_labels:["Jan","Fev","Mar","Abr","Mai","Jun"],daily_m:[6,5,9,2,4,1],daily_v:[1,0,0,0,2,0],inst_labels:["Jan","Fev","Mar","Abr","Mai","Jun"],inst_fma:[3,2,4,1,4,1],inst_ima:[3,2,5,1,1,0],inst_biota:[1,1,0,0,1,0],inst_tamar:[0,0,0,0,0,0],hist:[{ano:"2020",n:18,t:"normal"},{ano:"2021",n:22,t:"normal"},{ano:"2022",n:15,t:"normal"},{ano:"2023",n:28,t:"normal"},{ano:"2024",n:31,t:"normal"},{ano:"2025",n:24,t:"normal"},{ano:"2026",n:30,t:"2026"}],cor:"#1A7A4A",icone:"🐬",label:"Mamíferos Marinhos",met:false}};
+const INST_CORES={FMA:"#185FA5",IMA:"#534AB7",Biota:"#1D9E75",TAMAR:"#F0A500"};
+const MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+const DIAS_PT=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const MESES_PT=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+let chartSerie=null,chartMensal=null,chartInst=null,grupoAtual="Aves";
 
-function setGrupo(g,btn){grupoAtual=g;document.querySelectorAll('.grupo-btn').forEach(b=>b.className='grupo-btn');btn.className=`grupo-btn ativo-${g.toLowerCase()}`;renderDados(g);document.getElementById('secao-met').style.display=DADOS[g].met?'block':'none';}
+function showZona(zona,btn){
+  ["norte","centro","sul"].forEach(z=>{document.getElementById("dias-"+z).style.display=z===zona?"block":"none";});
+  document.querySelectorAll(".zona-tab").forEach(b=>b.className="zona-tab");
+  btn.className="zona-tab ativo";
+}
+
+function setGrupo(g,btn){
+  grupoAtual=g;
+  document.querySelectorAll(".grupo-btn").forEach(b=>b.className="grupo-btn");
+  btn.className="grupo-btn ativo-"+g.toLowerCase();
+  renderDados(g);
+  document.getElementById("secao-met").style.display=DADOS[g].met?"block":"none";
+}
 
 function renderDados(g){
   const d=DADOS[g];
-  const box=document.getElementById('alerta-box');
-  if(g==='Aves'){box.className='alerta-box verde';document.getElementById('alerta-emoji').textContent='🔄';document.getElementById('alerta-titulo').textContent='Verificando condições meteoceanográficas...';document.getElementById('alerta-descricao').textContent='Boom de aves em curso: '+d.total.toLocaleString()+' registros em 2026';document.getElementById('alerta-badge').textContent='—';}
-  else if(g==='Reptilia'){box.className='alerta-box cinza';document.getElementById('alerta-emoji').textContent='🐢';document.getElementById('alerta-titulo').textContent='Tartarugas — Monitoramento de rotina';document.getElementById('alerta-descricao').textContent='Pico jan–mar encerrado. '+d.total+' registros em 2026 (97% mortos). TAMAR e Biota são executoras.';document.getElementById('alerta-badge').textContent='ROTINA';}
-  else{box.className='alerta-box cinza';document.getElementById('alerta-emoji').textContent='🐬';document.getElementById('alerta-titulo').textContent='Mamíferos marinhos — Distribuição anual';document.getElementById('alerta-descricao').textContent=d.total+' registros em 2026. Sotalia guianensis: 77% dos casos. Sem sazonalidade marcada.';document.getElementById('alerta-badge').textContent='ROTINA';}
-  document.getElementById('divider-dados').textContent=d.icone+' '+d.label+' — SIMBA/PMP-SE/AL 2026';
-  document.getElementById('cards-totais').innerHTML=`<div class="card"><div class="card-title">Total 2026</div><div class="metric-val" style="color:${d.cor}">${d.total.toLocaleString()}</div><div class="metric-unit">01/jan a 01/jun</div></div><div class="card"><div class="card-title">Mortos</div><div class="metric-val" style="color:var(--vermelho)">${d.mortos.toLocaleString()}</div><div class="metric-unit">${(d.mortos/d.total*100).toFixed(1)}%</div></div><div class="card"><div class="card-title">Vivos</div><div class="metric-val" style="color:var(--verde-md)">${d.vivos.toLocaleString()}</div><div class="metric-unit">${(d.vivos/d.total*100).toFixed(1)}%</div></div><div class="card"><div class="card-title">Mês mais intenso</div><div class="metric-val" style="font-size:18px;color:${d.cor}">${MESES[(d.mensal.reduce((a,b)=>a.total>b.total?a:b).month)-1]}</div><div class="metric-unit">${d.mensal.reduce((a,b)=>a.total>b.total?a:b).total} registros</div></div>`;
+  const box=document.getElementById("alerta-box");
+  if(g==="Aves"){box.className="alerta-box verde";document.getElementById("alerta-emoji").textContent="🔄";document.getElementById("alerta-titulo").textContent="Verificando condições meteoceanográficas...";document.getElementById("alerta-descricao").textContent="Boom de aves em curso: "+d.total.toLocaleString()+" registros em 2026";document.getElementById("alerta-badge").textContent="—";}
+  else if(g==="Reptilia"){box.className="alerta-box cinza";document.getElementById("alerta-emoji").textContent="🐢";document.getElementById("alerta-titulo").textContent="Tartarugas — Monitoramento de rotina";document.getElementById("alerta-descricao").textContent="Pico jan–mar encerrado. "+d.total+" registros em 2026 (97% mortos). TAMAR e Biota são executoras.";document.getElementById("alerta-badge").textContent="ROTINA";}
+  else{box.className="alerta-box cinza";document.getElementById("alerta-emoji").textContent="🐬";document.getElementById("alerta-titulo").textContent="Mamíferos marinhos — Distribuição anual";document.getElementById("alerta-descricao").textContent=d.total+" registros em 2026. Sotalia guianensis: 77% dos casos.";document.getElementById("alerta-badge").textContent="ROTINA";}
+  document.getElementById("divider-dados").textContent=d.icone+" "+d.label+" — SIMBA/PMP-SE/AL · FAI · 2026";
+  document.getElementById("cards-totais").innerHTML="<div class=\"card\"><div class=\"card-title\">Total 2026</div><div class=\"metric-val\" style=\"color:"+d.cor+"\">"+d.total.toLocaleString()+"</div><div class=\"metric-unit\">01/jan a 01/jun</div></div><div class=\"card\"><div class=\"card-title\">Mortos</div><div class=\"metric-val\" style=\"color:var(--vermelho)\">"+d.mortos.toLocaleString()+"</div><div class=\"metric-unit\">"+(d.mortos/d.total*100).toFixed(1)+"%</div></div><div class=\"card\"><div class=\"card-title\">Vivos</div><div class=\"metric-val\" style=\"color:var(--verde-md)\">"+d.vivos.toLocaleString()+"</div><div class=\"metric-unit\">"+(d.vivos/d.total*100).toFixed(1)+"%</div></div><div class=\"card\"><div class=\"card-title\">Mês mais intenso</div><div class=\"metric-val\" style=\"font-size:18px;color:"+d.cor+"\">"+MESES[(d.mensal.reduce((a,b)=>a.total>b.total?a:b).month)-1]+"</div><div class=\"metric-unit\">"+d.mensal.reduce((a,b)=>a.total>b.total?a:b).total+" reg.</div></div>";
   if(chartSerie)chartSerie.destroy();
-  chartSerie=new Chart(document.getElementById('chartSerie'),{type:'line',data:{labels:d.daily_labels,datasets:[{label:'Mortos',data:d.daily_m,borderColor:'#C0392B',backgroundColor:'rgba(192,57,43,.08)',tension:.3,borderWidth:2,pointRadius:0,fill:true},{label:'Vivos',data:d.daily_v,borderColor:'#1A7A4A',backgroundColor:'transparent',tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{autoSkip:true,maxTicksLimit:9,font:{size:9},maxRotation:40},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(128,128,128,.1)'}}}}});
+  chartSerie=new Chart(document.getElementById("chartSerie"),{type:"line",data:{labels:d.daily_labels,datasets:[{label:"Mortos",data:d.daily_m,borderColor:"#C0392B",backgroundColor:"rgba(192,57,43,.08)",tension:.3,borderWidth:2,pointRadius:0,fill:true},{label:"Vivos",data:d.daily_v,borderColor:"#1A7A4A",backgroundColor:"transparent",tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{autoSkip:true,maxTicksLimit:9,font:{size:9},maxRotation:40},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:"rgba(128,128,128,.1)"}}}}});
   if(chartMensal)chartMensal.destroy();
-  chartMensal=new Chart(document.getElementById('chartMensal'),{type:'bar',data:{labels:d.mensal.map(m=>MESES[m.month-1]),datasets:[{label:'Mortos',data:d.mensal.map(m=>m.mortos),backgroundColor:'rgba(192,57,43,.7)',borderWidth:0,stack:'a'},{label:'Vivos',data:d.mensal.map(m=>m.vivos),backgroundColor:'rgba(26,122,74,.7)',borderWidth:0,stack:'a'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:10},boxWidth:10,boxHeight:10}}},scales:{x:{stacked:true,ticks:{font:{size:10}},grid:{display:false}},y:{stacked:true,ticks:{font:{size:9}},grid:{color:'rgba(128,128,128,.1)'}}}}});
+  chartMensal=new Chart(document.getElementById("chartMensal"),{type:"bar",data:{labels:d.mensal.map(m=>MESES[m.month-1]),datasets:[{label:"Mortos",data:d.mensal.map(m=>m.mortos),backgroundColor:"rgba(192,57,43,.7)",borderWidth:0,stack:"a"},{label:"Vivos",data:d.mensal.map(m=>m.vivos),backgroundColor:"rgba(26,122,74,.7)",borderWidth:0,stack:"a"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:"top",labels:{font:{size:10},boxWidth:10,boxHeight:10}}},scales:{x:{stacked:true,ticks:{font:{size:10}},grid:{display:false}},y:{stacked:true,ticks:{font:{size:9}},grid:{color:"rgba(128,128,128,.1)"}}}}});
   const maxT=Math.max(...d.inst_res.map(i=>i.total));
-  document.getElementById('inst-cards').innerHTML=d.inst_res.map(i=>`<div class="inst-card"><div class="inst-nome" style="color:${INST_CORES[i.inst]||'#333'}">${i.inst}</div><div class="inst-total" style="color:${INST_CORES[i.inst]||'#333'}">${i.total}</div><div class="inst-sub">Mortos: ${i.mortos} · Vivos: ${i.vivos}</div><div class="inst-sub">${i.pct}% vivos</div><div class="inst-bar"><div class="inst-bar-fill" style="width:${(i.total/maxT*100).toFixed(0)}%;background:${INST_CORES[i.inst]||'#888'}"></div></div></div>`).join('');
+  document.getElementById("inst-cards").innerHTML=d.inst_res.map(i=>"<div class=\"inst-card\"><div class=\"inst-nome\" style=\"color:"+(INST_CORES[i.inst]||"#333")+"\">"+ i.inst+"</div><div class=\"inst-total\" style=\"color:"+(INST_CORES[i.inst]||"#333")+"\">"+ i.total+"</div><div class=\"inst-sub\">Mortos: "+i.mortos+" · Vivos: "+i.vivos+"</div><div class=\"inst-sub\">"+i.pct+"% vivos</div><div class=\"inst-bar\"><div class=\"inst-bar-fill\" style=\"width:"+(i.total/maxT*100).toFixed(0)+"%;background:"+(INST_CORES[i.inst]||"#888")+";\"></div></div></div>").join("");
   if(chartInst)chartInst.destroy();
   const instDS=[];
-  if(d.inst_fma.some(v=>v>0))instDS.push({label:'FMA',data:d.inst_fma,borderColor:INST_CORES.FMA,backgroundColor:'transparent',tension:.3,borderWidth:2,pointRadius:0});
-  if(d.inst_ima.some(v=>v>0))instDS.push({label:'IMA',data:d.inst_ima,borderColor:INST_CORES.IMA,backgroundColor:'transparent',tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[4,3]});
-  if(d.inst_biota.some(v=>v>0))instDS.push({label:'Biota',data:d.inst_biota,borderColor:INST_CORES.Biota,backgroundColor:'transparent',tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[2,4]});
-  if(d.inst_tamar.some(v=>v>0))instDS.push({label:'TAMAR',data:d.inst_tamar,borderColor:INST_CORES.TAMAR,backgroundColor:'transparent',tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[6,2]});
-  chartInst=new Chart(document.getElementById('chartInst'),{type:'line',data:{labels:d.inst_labels,datasets:instDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:10},boxWidth:10,boxHeight:10}}},scales:{x:{ticks:{autoSkip:true,maxTicksLimit:10,font:{size:9},maxRotation:40},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(128,128,128,.1)'}}}}});
+  if(d.inst_fma.some(v=>v>0))instDS.push({label:"FMA",data:d.inst_fma,borderColor:INST_CORES.FMA,backgroundColor:"transparent",tension:.3,borderWidth:2,pointRadius:0});
+  if(d.inst_ima.some(v=>v>0))instDS.push({label:"IMA",data:d.inst_ima,borderColor:INST_CORES.IMA,backgroundColor:"transparent",tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[4,3]});
+  if(d.inst_biota.some(v=>v>0))instDS.push({label:"Biota",data:d.inst_biota,borderColor:INST_CORES.Biota,backgroundColor:"transparent",tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[2,4]});
+  if(d.inst_tamar.some(v=>v>0))instDS.push({label:"TAMAR",data:d.inst_tamar,borderColor:INST_CORES.TAMAR,backgroundColor:"transparent",tension:.3,borderWidth:1.5,pointRadius:0,borderDash:[6,2]});
+  chartInst=new Chart(document.getElementById("chartInst"),{type:"line",data:{labels:d.inst_labels,datasets:instDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:"top",labels:{font:{size:10},boxWidth:10,boxHeight:10}}},scales:{x:{ticks:{autoSkip:true,maxTicksLimit:10,font:{size:9},maxRotation:40},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:"rgba(128,128,128,.1)"}}}}});
   const maxSp=d.top_sp[0].n;
-  document.getElementById('sp-title').textContent=`Espécies mais frequentes — ${d.label} 2026`;
-  document.getElementById('sp-bars').innerHTML=d.top_sp.map(s=>`<div class="sp-bar-wrap"><div class="sp-nome">${s.e}</div><div class="sp-bar-bg"><div class="sp-bar-fill" style="width:${(s.n/maxSp*100).toFixed(0)}%;background:${d.cor}"><span class="sp-n">${s.n}</span></div></div></div>`).join('');
+  document.getElementById("sp-title").textContent="Espécies mais frequentes — "+d.label+" 2026";
+  document.getElementById("sp-bars").innerHTML=d.top_sp.map(s=>"<div class=\"sp-bar-wrap\"><div class=\"sp-nome\">"+s.e+"</div><div class=\"sp-bar-bg\"><div class=\"sp-bar-fill\" style=\"width:"+(s.n/maxSp*100).toFixed(0)+"%;background:"+d.cor+"\"><span class=\"sp-n\">"+s.n+"</span></div></div></div>").join("");
   const maxH=Math.max(...d.hist.map(h=>h.n));
-  document.getElementById('hist-bars').innerHTML=d.hist.map(h=>{const pct=Math.max(3,(h.n/maxH)*100);const cor=h.t==='anomalia'?'#C0392B':h.t==='2026'?d.cor:'#1A7A4A';return `<div class="hist-bar-wrap"><div class="hist-n">${h.n}</div><div class="hist-bar" style="height:${pct}%;background:${cor};"></div><div class="hist-ano">${h.ano}</div></div>`;}).join('');
-  const rec={Aves:`<span style="color:var(--azul);font-weight:600;">🐦 Aves marinhas — Boom em curso</span><br>• Boom de 2026 acumula 1.472 encalhes em mai–jun (até 01/06), pico de 123 em 27/05<br>• FMA responde por 78% dos registros; IMA por 19%<br>• Proporção de vivos: 24,7% — preparar triagem e contato com CETAS para dias de risco alto<br>• Sítio do Conde (Sul): volume crescente — atenção redobrada nessa zona`,Reptilia:`<span style="color:var(--roxo);font-weight:600;">🐢 Tartarugas — Pico sazonal encerrado</span><br>• Pico jan–mar concluído. Monitoramento de manutenção em mai–jun<br>• 97% dos encalhes são mortos — L. olivacea e C. mydas dominam<br>• TAMAR e Biota são executoras exclusivas deste grupo<br>• Atenção para nova temporada a partir de agosto–setembro`,Mammalia:`<span style="color:var(--verde-md);font-weight:600;">🐬 Mamíferos marinhos — Monitoramento de rotina</span><br>• 30 registros em 2026, sem sazonalidade definida<br>• Sotalia guianensis (tucuxi): 77% dos casos — mortalidade com provável componente antrópico<br>• Qualquer evento com mais de 3 mamíferos em um único dia deve ser reportado imediatamente`};
-  document.getElementById('recomendacoes').innerHTML=rec[g];
+  document.getElementById("hist-bars").innerHTML=d.hist.map(h=>{const pct=Math.max(3,(h.n/maxH)*100);const cor=h.t==="anomalia"?"#C0392B":h.t==="2026"?d.cor:"#1A7A4A";return "<div class=\"hist-bar-wrap\"><div class=\"hist-n\">"+h.n+"</div><div class=\"hist-bar\" style=\"height:"+pct+"%;background:"+cor+";\"></div><div class=\"hist-ano\">"+h.ano+"</div></div>";}).join("");
+  const rec={Aves:"<span style=\"color:var(--azul);font-weight:600;\">🐦 Aves marinhas — Boom em curso</span><br>• 1.472 encalhes em mai–jun/2026 (até 01/06), pico de 123 em 27/05<br>• FMA: 78% dos registros · IMA: 19%<br>• 24,7% chegam vivos — preparar triagem e acionar CETAS em dias de risco alto<br>• Zona Sul (Sítio do Conde): volume crescente — atenção redobrada",Reptilia:"<span style=\"color:var(--roxo);font-weight:600;\">🐢 Tartarugas — Pico sazonal encerrado</span><br>• Pico jan–mar concluído. Monitoramento de manutenção em mai–jun<br>• 97% mortos — L. olivacea e C. mydas dominam<br>• Nova temporada esperada a partir de agosto–setembro",Mammalia:"<span style=\"color:var(--verde-md);font-weight:600;\">🐬 Mamíferos marinhos — Rotina</span><br>• 30 registros em 2026, sem sazonalidade definida<br>• Sotalia guianensis: 77% — mortalidade com componente antrópico<br>• Evento com &gt;3 mamíferos/dia: reportar imediatamente"};
+  document.getElementById("recomendacoes").innerHTML=rec[g];
 }
 
 function calcRisco(v,o){const rv=v<4?.1:v<5?.25:v<6?.45:v<7?.65:v<8?.8:.95;const ro=o<0.8?.05:o<1.2?.2:o<1.6?.4:o<2?.65:o<2.5?.8:.95;const mes=new Date().getMonth()+1;const rs=mes>=5&&mes<=6?1:mes===4||mes===7?.6:mes===3||mes===8?.3:.1;return Math.min(.99,(rv*.45+ro*.35)*rs+.05);}
-function cl(r){return r<.35?'baixo':r<.65?'medio':'alto';}
-function lb(r){return r<.35?'BAIXO':r<.65?'MODERADO':'ALTO';}
-function em(r){return r<.35?'🟢':r<.65?'🟡':'🔴';}
+function cl(r){return r<.35?"baixo":r<.65?"medio":"alto";}
+function lb(r){return r<.35?"BAIXO":r<.65?"MODERADO":"ALTO";}
+function em(r){return r<.35?"🟢":r<.65?"🟡":"🔴";}
+function wE(v){return v>7?"💨":v>5?"🌬️":"🍃";}
+function oE(o){return o>2?"🌊":o>1.2?"〰️":"💧";}
+function wD(v){return v>7?"Vento forte":v>5?"Vento mod.":"Vento fraco";}
+function oD(o){return o>2?"Ondas altas":o>1.2?"Ondas mod.":"Ondas baixas";}
+
+function buildDias(data,gridId){
+  const d=data.daily;const g=document.getElementById(gridId);g.innerHTML="";
+  for(let i=0;i<16;i++){const v=d.wind_speed_10m_max[i]||0;const o=d.wave_height_max?d.wave_height_max[i]||0:0;const r=calcRisco(v,o);const dt=new Date(d.time[i]);const nm=i===0?"Hoje":DIAS_PT[dt.getDay()];const dl=dt.getDate()+"/"+ MESES_PT[dt.getMonth()];g.innerHTML+="<div class=\"dia-card "+(i===0?"hoje":"")+"\" ><div class=\"dia-nome\">"+nm+"</div><div class=\"dia-sub\">"+dl+"</div><div class=\"dia-emoji\">"+wE(v)+oE(o)+"</div><div class=\"dia-vento\">"+v.toFixed(1)+" m/s</div><div class=\"dia-onda\">"+o.toFixed(2)+" m</div><div class=\"dia-desc\">"+wD(v)+" · "+oD(o)+"</div><div class=\"dia-risco r-"+cl(r)+"\">"+em(r)+" "+lb(r)+"</div></div>";}
+}
 
 async function fetchMeteo(){
   try{
-    const[n,c,s,f16]=await Promise.all([
-      fetch('https://api.open-meteo.com/v1/forecast?latitude=-10.2&longitude=-36.4&daily=wind_speed_10m_max,wave_height_max&wind_speed_unit=ms&timezone=America%2FSao_Paulo&forecast_days=1').then(r=>r.json()),
-      fetch('https://api.open-meteo.com/v1/forecast?latitude=-10.95&longitude=-37.05&daily=wind_speed_10m_max,wave_height_max&wind_speed_unit=ms&timezone=America%2FSao_Paulo&forecast_days=1').then(r=>r.json()),
-      fetch('https://api.open-meteo.com/v1/forecast?latitude=-11.8&longitude=-37.6&daily=wind_speed_10m_max,wave_height_max&wind_speed_unit=ms&timezone=America%2FSao_Paulo&forecast_days=1').then(r=>r.json()),
-      fetch('https://api.open-meteo.com/v1/forecast?latitude=-10.95&longitude=-37.05&daily=wind_speed_10m_max,wave_height_max&wind_speed_unit=ms&timezone=America%2FSao_Paulo&forecast_days=16').then(r=>r.json())
-    ]);
+    const ZONAS=[{lat:-10.2,lon:-36.4,nome:"Norte",local:"Piaçabuçu/AL → Barra dos Coqueiros/SE"},{lat:-10.95,lon:-37.05,nome:"Centro",local:"Aracaju/SE → Estância/SE"},{lat:-11.8,lon:-37.6,nome:"Sul",local:"Estância/SE → Sítio do Conde/BA"}];
+    const gridIds=["grid-norte","grid-centro","grid-sul"];
+    const resps=await Promise.all(ZONAS.map(z=>fetch("https://api.open-meteo.com/v1/forecast?latitude="+z.lat+"&longitude="+z.lon+"&daily=wind_speed_10m_max,wave_height_max&wind_speed_unit=ms&timezone=America%2FSao_Paulo&forecast_days=16").then(r=>r.json())));
     const now=new Date();
-    document.getElementById('last-update').innerHTML=`Atualizado: ${now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}<br>${now.toLocaleDateString('pt-BR')}`;
-    const zd=[n,c,s];const znames=['Norte','Centro','Sul'];const zlocals=['Piaçabuçu/AL → Barra dos Coqueiros/SE','Aracaju/SE → Estância/SE','Estância/SE → Sítio do Conde/BA'];
-    const zg=document.getElementById('zona-grid');zg.innerHTML='';let riscoMax=0;
-    zd.forEach((z,i)=>{const v=z.daily.wind_speed_10m_max[0]||0;const o=z.daily.wave_height_max?z.daily.wave_height_max[0]||0:0;const r=calcRisco(v,o);if(r>riscoMax)riscoMax=r;zg.innerHTML+=`<div class="zona-card ${cl(r)}"><div class="zona-nome">${znames[i]}</div><div class="zona-local">${zlocals[i]}</div><div class="zona-vento">${v.toFixed(1)} m/s</div><div class="zona-onda">${o.toFixed(2)} m onda</div><div class="zona-risco r-${cl(r)}">${em(r)} ${lb(r)}</div></div>`;});
-    const d16=f16.daily;const dg=document.getElementById('dias-grid');dg.innerHTML='';
-    for(let i=0;i<16;i++){const v=d16.wind_speed_10m_max[i]||0;const o=d16.wave_height_max?d16.wave_height_max[i]||0:0;const r=calcRisco(v,o);const dt=new Date(d16.time[i]);const nm=i===0?'Hoje':DIAS_PT[dt.getDay()];const dl=`${dt.getDate()}/${MESES_PT[dt.getMonth()]}`;dg.innerHTML+=`<div class="dia-card ${i===0?'hoje':''}"><div class="dia-nome">${nm}</div><div class="dia-sub">${dl}</div><div class="dia-emoji">${v>7?'💨':v>5?'🌬️':'🍃'}${o>2?'🌊':o>1.2?'〰️':'💧'}</div><div class="dia-vento">${v.toFixed(1)} m/s</div><div class="dia-onda">${o.toFixed(2)} m</div><div class="dia-risco r-${cl(r)}">${em(r)} ${lb(r)}</div></div>`;}
-    if(grupoAtual==='Aves'){const mes=now.getMonth()+1;const naJ=mes>=5&&mes<=6;const box=document.getElementById('alerta-box');box.className='alerta-box '+(riscoMax>=.65?'vermelho':riscoMax>=.35?'amarelo':'verde');document.getElementById('alerta-emoji').textContent=riscoMax>=.65?'⚠️':riscoMax>=.35?'🟡':'✅';document.getElementById('alerta-titulo').textContent=riscoMax>=.65?'ALERTA: Condições de alto risco — Boom de aves ativo':riscoMax>=.35?'ATENÇÃO: Condições moderadas — Janela migratória ativa':'Condições favoráveis — Monitoramento de rotina';document.getElementById('alerta-descricao').textContent=riscoMax>=.65?'Reforço de equipe recomendado. 1.472 aves registradas em mai–jun/2026.':naJ?'Boom 2026 em curso. Manter cobertura diária em todos os trechos.':'Verificar previsão diariamente.';document.getElementById('alerta-badge').textContent=riscoMax>=.65?'RISCO ALTO':riscoMax>=.35?'RISCO MODERADO':'RISCO BAIXO';}
-  }catch(e){document.getElementById('last-update').innerHTML='Erro météo<br>verifique conexão';}
+    document.getElementById("last-update").innerHTML="Atualizado: "+now.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})+"<br>"+now.toLocaleDateString("pt-BR");
+    const zg=document.getElementById("zona-grid");zg.innerHTML="";let riscoMax=0;
+    resps.forEach((resp,i)=>{const v=resp.daily.wind_speed_10m_max[0]||0;const o=resp.daily.wave_height_max?resp.daily.wave_height_max[0]||0:0;const r=calcRisco(v,o);if(r>riscoMax)riscoMax=r;zg.innerHTML+="<div class=\"zona-card "+cl(r)+"\" ><div class=\"zona-nome\">"+ZONAS[i].nome+"</div><div class=\"zona-local\">"+ZONAS[i].local+"</div><div class=\"zona-vento\">"+wE(v)+" "+v.toFixed(1)+" m/s</div><div class=\"zona-onda\">"+oE(o)+" "+o.toFixed(2)+" m · "+wD(v)+"</div><div class=\"zona-risco r-"+cl(r)+"\">"+em(r)+" "+lb(r)+"</div></div>";buildDias(resp,gridIds[i]);});
+    if(grupoAtual==="Aves"){const mes=now.getMonth()+1;const naJ=mes>=5&&mes<=6;const box=document.getElementById("alerta-box");box.className="alerta-box "+(riscoMax>=.65?"vermelho":riscoMax>=.35?"amarelo":"verde");document.getElementById("alerta-emoji").textContent=riscoMax>=.65?"⚠️":riscoMax>=.35?"🟡":"✅";document.getElementById("alerta-titulo").textContent=riscoMax>=.65?"ALERTA: Condições de alto risco — Boom de aves ativo":riscoMax>=.35?"ATENÇÃO: Condições moderadas — Janela migratória ativa":"Condições favoráveis — Monitoramento de rotina";document.getElementById("alerta-descricao").textContent=riscoMax>=.65?"Reforço de equipe recomendado. 1.472 aves em mai–jun/2026.":naJ?"Boom 2026 em curso. Manter cobertura diária.":"Verificar previsão diariamente.";document.getElementById("alerta-badge").textContent=riscoMax>=.65?"RISCO ALTO":riscoMax>=.35?"RISCO MODERADO":"RISCO BAIXO";}
+  }catch(e){document.getElementById("last-update").innerHTML="Erro météo<br>verifique conexão";}
 }
 
-renderDados('Aves');
+renderDados("Aves");
 fetchMeteo();
 setInterval(fetchMeteo,10*60*1000);
 </script>
